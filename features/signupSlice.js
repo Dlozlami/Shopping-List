@@ -7,9 +7,9 @@ const initialState = {
 };
 
 export const addUser = createAsyncThunk(
-  "signup/addUser",
+  "signUp/addUser",
   async (newUser, thunkAPI) => {
-    const url = `http://${IP}:8080/api/signup`;
+    const url = `http://${IP}:8080/api/signUp`;
     console.log(newUser);
     try {
       await axios.post(url, newUser);
@@ -34,8 +34,8 @@ export const addUser = createAsyncThunk(
   }
 );
 
-export const signupSlice = createSlice({
-  name: "signup",
+export const signUpSlice = createSlice({
+  name: "signUp",
   initialState,
   reducers: {
     setUserAdded: (state, action) => {
@@ -45,6 +45,6 @@ export const signupSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUserAdded } = signupSlice.actions;
+export const { setUserAdded } = signUpSlice.actions;
 
-export default signupSlice.reducer;
+export default signUpSlice.reducer;

@@ -11,8 +11,16 @@ export default function Layout() {
   return (
     <Provider store={store}>
       <Stack.Navigator>
-        <Stack.Screen name="index" component={Home} />
-        <Stack.Screen name="sign" component={Signup} />
+        <Stack.Screen
+          name="index"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="signup"
+          component={Signup}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </Provider>
   );
