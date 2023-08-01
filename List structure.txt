@@ -1,10 +1,14 @@
 Each list structure
 =====================
 groceries = [
+user_email = identify the list
 list_name = unique,
 date_created,
 items list = [
-	{item,quantity,price}
+	{item,quantity,price,amount}
 ],
 total
 ]
+
+
+Tables 
