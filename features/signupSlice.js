@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IP } from "@env";
 
 const initialState = {
-  userAdded: false,
+  userAdded: 0,
 };
 
 export const addUser = createAsyncThunk(
@@ -13,12 +13,22 @@ export const addUser = createAsyncThunk(
     console.log(newUser);
     try {
       await axios.post(url, newUser);
-      thunkAPI.dispatch(setUserAdded(true));
+      thunkAPI.dispatch(setUserAdded(201));
       setTimeout(() => {
-        thunkAPI.dispatch(setUserAdded(false));
+        thunkAPI.dispatch(setUserAdded(0));
       }, 10000); // 10 seconds delay
     } catch (error) {
       console.error(error);
+      if (error.response) {
+        const status = error.response.status;
+        if (status === 400 || status === 500) {
+          thunkAPI.dispatch(setUserAdded(status));
+        } else {
+          thunkAPI.dispatch(setUserAdded(0));
+        }
+      } else {
+        thunkAPI.dispatch(setUserAdded(0));
+      }
       throw error;
     }
   }
