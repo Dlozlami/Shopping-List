@@ -1,0 +1,10 @@
+Each list structure
+=====================
+groceries = [
+list_name = unique,
+date_created,
+items list = [
+	{item,quantity,price}
+],
+total
+]
