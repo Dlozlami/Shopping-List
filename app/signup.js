@@ -1,17 +1,19 @@
 import {
   ImageBackground,
-  StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../features/signupSlice";
+import MessageBox from "../component/messageBox";
+import formCSS from "../assets/css/formCSS";
 
 export default function Signup() {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [enableBTN, setEnableBTN] = useState(false);
   const dispatch = useDispatch();
   const { userAdded } = useSelector((store) => store.signUp);
   const [formData, setFormData] = useState({
@@ -23,11 +25,10 @@ export default function Signup() {
   });
 
   const handleSubmit = () => {
+    setEnableBTN(true);
     dispatch(addUser(formData));
-  };
-
-  const handlePopupOk = () => {
-    if (userAdded === 201) {
+    setModalVisible(true);
+    if (userAdded === 201 || userAdded === 400) {
       setFormData({
         name: "",
         surname: "",
@@ -36,6 +37,7 @@ export default function Signup() {
         phone: "",
       });
     }
+    setEnableBTN(false);
   };
 
   return (
@@ -43,33 +45,33 @@ export default function Signup() {
       source={require("../assets/img/Shifty.jpg")}
       style={{ width: "100%", height: "100%" }}
     >
-      <View style={styles.container}>
-        <View style={styles.panel}>
-          <Text style={styles.heading}>Sign up</Text>
-          <Text style={styles.subheading}>
+      <View style={formCSS.container}>
+        <View style={formCSS.panel}>
+          <Text style={formCSS.heading}>Sign up</Text>
+          <Text style={formCSS.subheading}>
             Start creating your shopping lists effortlessly! Let's get started
             🛍️
           </Text>
           <TextInput
-            style={styles.input}
+            style={formCSS.input}
             placeholder="Name"
             value={formData.name}
             onChangeText={(text) => setFormData({ ...formData, name: text })}
           />
           <TextInput
-            style={styles.input}
+            style={formCSS.input}
             placeholder="Surname"
             value={formData.surname}
             onChangeText={(text) => setFormData({ ...formData, surname: text })}
           />
           <TextInput
-            style={styles.input}
+            style={formCSS.input}
             placeholder="Email"
             value={formData.email}
             onChangeText={(text) => setFormData({ ...formData, email: text })}
           />
           <TextInput
-            style={styles.input}
+            style={formCSS.input}
             placeholder="Password"
             secureTextEntry={true}
             value={formData.password}
@@ -78,13 +80,13 @@ export default function Signup() {
             }
           />
           <TextInput
-            style={styles.input}
+            style={formCSS.input}
             placeholder="Phone"
             value={formData.phone}
             onChangeText={(text) => setFormData({ ...formData, phone: text })}
           />
           <TouchableOpacity
-            style={styles.button}
+            style={formCSS.button}
             onPress={() => {
               if (
                 !formData.name ||
@@ -93,114 +95,57 @@ export default function Signup() {
                 !formData.password ||
                 !formData.phone
               ) {
-                Alert.alert("Please fill in all fields.");
+                setModalVisible(true);
               } else {
                 handleSubmit();
               }
             }}
-            disabled={
-              userAdded === 201 || userAdded === 400 || userAdded === 500
-            }
+            disabled={enableBTN}
           >
-            <Text style={styles.buttonText}>Submit</Text>
+            <Text style={formCSS.buttonText}>Submit</Text>
           </TouchableOpacity>
         </View>
       </View>
-      {userAdded === 201 && (
-        <View style={styles.popup}>
-          <Text style={styles.popupText}>Successful!</Text>
-          <TouchableOpacity style={styles.popupButton} onPress={handlePopupOk}>
-            <Text style={styles.popupButtonText}>OK</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      {userAdded === 400 && (
-        <View style={styles.popup}>
-          <Text style={styles.popupText}>User already exists.</Text>
-          <TouchableOpacity style={styles.popupButton} onPress={handlePopupOk}>
-            <Text style={styles.popupButtonText}>OK</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-      {userAdded === 500 && (
-        <View style={styles.popup}>
-          <Text style={styles.popupText}>
-            Sorry, an error occurred. Please try again.
-          </Text>
-          <TouchableOpacity style={styles.popupButton} onPress={handlePopupOk}>
-            <Text style={styles.popupButtonText}>OK</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      {userAdded === 0 && modalVisible ? (
+        <MessageBox
+          message={"Please fill in all fields."}
+          textColor={"#333"}
+          btnColor={"#878d5d"}
+          btnTextColor={"white"}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      ) : null}
+      {userAdded === 500 && modalVisible ? (
+        <MessageBox
+          message={"Sorry, an error occurred. Please try again."}
+          textColor={"#333"}
+          btnColor={"#878d5d"}
+          btnTextColor={"white"}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      ) : null}
+      {userAdded === 201 && modalVisible ? (
+        <MessageBox
+          message={"User added successfully!"}
+          textColor={"#333"}
+          btnColor={"#878d5d"}
+          btnTextColor={"white"}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      ) : null}
+      {userAdded === 400 && modalVisible ? (
+        <MessageBox
+          message={"User already exists."}
+          textColor={"#333"}
+          btnColor={"#878d5d"}
+          btnTextColor={"white"}
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+        />
+      ) : null}
     </ImageBackground>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  panel: {
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 10,
-  },
-  subheading: {
-    fontSize: 16,
-    color: "#333",
-    marginBottom: 20,
-  },
-  input: {
-    height: 40,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-  button: {
-    backgroundColor: "#878d5d",
-    paddingVertical: 10,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  popup: {
-    position: "absolute",
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
-    top: "50%",
-    left: "50%",
-    transform: [{ translateX: -100 }, { translateY: -100 }],
-  },
-  popupText: {
-    fontSize: 16,
-    color: "#333",
-    marginBottom: 10,
-  },
-  popupButton: {
-    backgroundColor: "#878d5d",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  popupButtonText: {
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
