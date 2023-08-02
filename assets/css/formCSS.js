@@ -31,7 +31,7 @@ export default styles = {
   },
   button: {
     backgroundColor: "#878d5d",
-    paddingVertical: 10,
+    padding: 10,
     borderRadius: 5,
     alignItems: "center",
   },

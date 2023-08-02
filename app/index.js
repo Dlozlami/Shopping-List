@@ -28,7 +28,7 @@ export default function Login() {
   const handleLogIn = () => {
     setEnableBTN(true);
     dispatch(loginUser(formData));
-    //console.log("handleLogIn", isLoggedIn);
+    console.log("handleLogIn", isLoggedIn);
     setFormData({
       email: "",
       password: "",
@@ -96,6 +96,12 @@ export default function Login() {
               disabled={enableBTN}
             >
               <Text style={formCSS.buttonText}>log in</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("signup")}>
+              <Text style={formCSS.subheading}>
+                {"\n"}
+                Don't have an account? Sign up here!
+              </Text>
             </TouchableOpacity>
           </View>
         </View>

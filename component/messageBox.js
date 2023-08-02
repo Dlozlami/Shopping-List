@@ -10,7 +10,7 @@ export default function MessageBox({
   setModalVisible,
   modalVisible,
 }) {
-  console.log("This is form checking");
+  //console.log("This is form checking");
   return (
     <Modal transparent animationType="fade" visible={modalVisible}>
       <View style={styles.centeredView}>

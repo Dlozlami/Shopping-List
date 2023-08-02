@@ -20,7 +20,7 @@ export default function Layout() {
         <Stack.Screen
           name="signup"
           component={Signup}
-          options={{ headerShown: false }}
+          options={{ title: "Log in" }}
         />
         <Stack.Screen
           name="lists"

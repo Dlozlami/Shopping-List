@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../features/signupSlice";
 import MessageBox from "../component/messageBox";
 import formCSS from "../assets/css/formCSS";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function Signup() {
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,8 +28,6 @@ export default function Signup() {
   const handleSubmit = () => {
     setEnableBTN(true);
     dispatch(addUser(formData));
-    setModalVisible(true);
-    console.log(userAdded);
     setFormData({
       name: "",
       surname: "",
@@ -36,6 +35,7 @@ export default function Signup() {
       password: "",
       phone: "",
     });
+    setModalVisible(true);
     setEnableBTN(false);
   };
 

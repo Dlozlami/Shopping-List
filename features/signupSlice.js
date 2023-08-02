@@ -10,9 +10,10 @@ export const addUser = createAsyncThunk(
   "signUp/addUser",
   async (newUser, thunkAPI) => {
     const url = `http://${IP}:8080/api/signUp`;
-    console.log(newUser);
+
     try {
       await axios.post(url, newUser);
+      console.log("addUser", newUser);
       thunkAPI.dispatch(setUserAdded(201));
       setTimeout(() => {
         thunkAPI.dispatch(setUserAdded(0));
