@@ -16,13 +16,16 @@ export const addUser = createAsyncThunk(
       thunkAPI.dispatch(setUserAdded(201));
       setTimeout(() => {
         thunkAPI.dispatch(setUserAdded(0));
-      }, 10000); // 10 seconds delay
+      }, 5000); // 10 seconds delay
     } catch (error) {
       console.error(error);
       if (error.response) {
         const status = error.response.status;
         if (status === 400 || status === 500) {
           thunkAPI.dispatch(setUserAdded(status));
+          setTimeout(() => {
+            thunkAPI.dispatch(setUserAdded(0));
+          }, 10000);
         } else {
           thunkAPI.dispatch(setUserAdded(0));
         }

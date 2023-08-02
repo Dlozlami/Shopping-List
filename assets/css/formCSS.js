@@ -8,6 +8,7 @@ export default styles = {
     backgroundColor: "white",
     padding: 20,
     borderRadius: 10,
+    margin: 10,
   },
   heading: {
     fontSize: 24,

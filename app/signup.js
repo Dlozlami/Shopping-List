@@ -28,15 +28,14 @@ export default function Signup() {
     setEnableBTN(true);
     dispatch(addUser(formData));
     setModalVisible(true);
-    if (userAdded === 201 || userAdded === 400) {
-      setFormData({
-        name: "",
-        surname: "",
-        email: "",
-        password: "",
-        phone: "",
-      });
-    }
+    console.log(userAdded);
+    setFormData({
+      name: "",
+      surname: "",
+      email: "",
+      password: "",
+      phone: "",
+    });
     setEnableBTN(false);
   };
 
@@ -96,6 +95,7 @@ export default function Signup() {
                 !formData.phone
               ) {
                 setModalVisible(true);
+                console.log(userAdded);
               } else {
                 handleSubmit();
               }

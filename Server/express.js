@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const mongoose = require("mongoose");
 const https = require("https");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const User = require("./models/user.model");
 const ip = "10.255.66.152"; // change this to suit context
 const app = express();
@@ -36,12 +37,16 @@ app.post("/api/signup", async (req, res) => {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    // Create a new user
+    // Hash the password before saving it to the database
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create a new user with the hashed password
     const newUser = new User({
       name,
       surname,
       email,
-      password,
+      password: hashedPassword,
       phone,
     });
 
@@ -51,6 +56,42 @@ app.post("/api/signup", async (req, res) => {
     return res.status(201).json({ message: "User registered successfully" });
   } catch (err) {
     console.error("Error during signup:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/api/login", async (req, res) => {
+  console.log("enter login post");
+  try {
+    const { email, password } = req.body;
+
+    // Check if the user exists in the database
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.log("wrong email");
+      return res.status(401).json({ message: "Incorrect credentials" });
+    }
+
+    // Compare the provided password with the user's hashed password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      console.log("wrong password");
+      return res.status(401).json({ message: "Incorrect credentials" });
+    }
+
+    // Generate a JSON Web Token (JWT) with the user's email, name, and surname encoded
+    const secretKey = process.env.JWT_SECRET_KEY;
+    const payload = {
+      email: user.email,
+      name: user.name,
+      surname: user.surname,
+    };
+    const token = jwt.sign(payload, secretKey);
+
+    // Return the JWT as a response on successful login
+    return res.status(200).json({ message: "Login successful", token });
+  } catch (err) {
+    console.error("Error during login:", err);
     return res.status(500).json({ message: "Internal server error" });
   }
 });
