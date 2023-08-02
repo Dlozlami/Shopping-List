@@ -7,6 +7,7 @@ const https = require("https");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("./models/user.model");
+const ShoppingList = require("./models/shoppingList.model");
 const ip = "10.255.66.152"; // change this to suit context
 const app = express();
 app.use(cors());
@@ -15,7 +16,41 @@ app.use(morgan("tiny"));
 
 mongoose.connect("mongodb://127.0.0.1:27017/shopping-list"); //Replace ****** with db name
 
-//Routes for user authentication and authorization using JWT tokens
+app.get("/api/lists", async (req, res) => {
+  try {
+    // Fetch all shopping lists from the database
+    const lists = await ShoppingList.find();
+    return res.status(200).json(lists);
+  } catch (err) {
+    console.error("Error fetching lists:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.post("/api/lists", async (req, res) => {
+  try {
+    const { list_name, user_email } = req.body;
+    function toTitleCase(str) {
+      return str.replace(/\b\w/g, (match) => match.toUpperCase());
+    }
+    // Create a new shopping list record with the provided name and email
+    const newList = new ShoppingList({
+      list_name: toTitleCase(list_name),
+      user_email: user_email,
+      total: 0,
+    });
+
+    // Save the new shopping list to the database
+    await newList.save();
+
+    return res
+      .status(201)
+      .json({ message: "Shopping list created successfully" });
+  } catch (err) {
+    console.error("Error creating shopping list:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 app.get("/api/users", async (req, res) => {
   try {

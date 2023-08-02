@@ -6,9 +6,13 @@ export default function AddList({
   size = 28,
   bgColor = "black",
   textColor = "white",
+  setModalVisible,
 }) {
   return (
-    <TouchableOpacity style={{ ...styles.circle, backgroundColor: bgColor }}>
+    <TouchableOpacity
+      style={{ ...styles.circle, backgroundColor: bgColor }}
+      onPress={() => setModalVisible(true)}
+    >
       <FontAwesome5 name="plus" size={size} color={textColor} />
     </TouchableOpacity>
   );

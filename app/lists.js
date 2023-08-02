@@ -7,6 +7,7 @@ import {
   StatusBar,
   SafeAreaView,
   Modal,
+  ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,21 +26,21 @@ export default function Lists() {
       source={require("../assets/img/Shifty.jpg")}
       style={{ width: "100%", height: "100%" }}
     >
-      <View style={formCSS.container}>
-        <View style={formCSS.panel}>
+      <ScrollView contentContainerStyle={formCSS.container}>
+        <View style={{ ...formCSS.panel, width: "90%" }}>
           <Text style={formCSS.heading}>Shopping lists 🛍️</Text>
         </View>
 
-        <View style={formCSS.panel}>
+        <View style={{ ...formCSS.panel, width: "90%" }}>
           <Text style={formCSS.subheading}>
-            You have no lists. Click the '+' button to add a list
+            You have no lists. {"\n"}Click the '+' button to add a list
           </Text>
         </View>
-      </View>
+      </ScrollView>
       <View style={styles.addList}>
-        <AddList />
+        <AddList setModalVisible={setModalVisible} />
       </View>
-      <Modal></Modal>
+      <Modal visible={modalVisible}></Modal>
     </ImageBackground>
   );
 }
