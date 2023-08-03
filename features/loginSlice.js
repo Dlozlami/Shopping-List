@@ -58,7 +58,7 @@ export const loginUser = createAsyncThunk(
   "login/loginUser",
   async (user, thunkAPI) => {
     const url = `http://${IP}:8080/api/login`;
-    //console.log("What", url);
+
     try {
       const response = await axios.post(url, user);
       await storeJWTInSecureStore(response.data.token);

@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./index";
 import Signup from "./signup";
 import Lists from "./lists";
+import ViewList from "./viewList";
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,11 @@ export default function Layout() {
           name="lists"
           component={Lists}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="viewList"
+          component={ViewList}
+          options={{ title: "Shopping lists" }}
         />
       </Stack.Navigator>
     </Provider>

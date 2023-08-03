@@ -4,27 +4,27 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  StatusBar,
-  SafeAreaView,
   Modal,
   ScrollView,
   TextInput,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import MessageBox from "../component/messageBox";
 import formCSS from "../assets/css/formCSS";
 import jwt_decode from "jwt-decode";
-import { getCredentials } from "../features/loginSlice";
 import AddList from "../component/addList";
-import { createList } from "../features/listsSlice";
+import { createList, fetchLists } from "../features/listsSlice";
+import ListCard from "../component/listCard";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Lists() {
+  const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [newListName, setNewListName] = useState("");
   const dispatch = useDispatch();
-  const { isLoggedIn } = useSelector((store) => store.list);
+  const { user_lists } = useSelector((store) => store.list);
 
   const handleCreateList = async () => {
     const jwt = await SecureStore.getItemAsync("jwt");
@@ -40,6 +40,10 @@ export default function Lists() {
     setNewListName(""); // Clear the input field after creating the list
   };
 
+  useEffect(() => {
+    dispatch(fetchLists());
+  }, []);
+
   return (
     <ImageBackground
       source={require("../assets/img/Shifty.jpg")}
@@ -49,12 +53,19 @@ export default function Lists() {
         <View style={{ ...formCSS.panel, width: "90%" }}>
           <Text style={formCSS.heading}>Shopping lists 🛍️</Text>
         </View>
-
-        <View style={{ ...formCSS.panel, width: "90%" }}>
-          <Text style={formCSS.subheading}>
-            You have no lists. {"\n"}Click the '+' button to add a list
-          </Text>
-        </View>
+        {user_lists.length === 0 ? (
+          <View style={{ ...formCSS.panel, width: "90%" }}>
+            <Text style={formCSS.subheading}>
+              You have no lists. {"\n"}Click the '+' button to add a list
+            </Text>
+          </View>
+        ) : (
+          <>
+            {user_lists.map((list) => (
+              <ListCard key={list._id} shoppingList={list} />
+            ))}
+          </>
+        )}
       </ScrollView>
       <View style={styles.addList}>
         <AddList setModalVisible={setModalVisible} />

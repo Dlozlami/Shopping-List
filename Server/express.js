@@ -17,6 +17,48 @@ app.use(morgan("tiny"));
 
 mongoose.connect("mongodb://127.0.0.1:27017/shopping-list"); //Replace ****** with db name
 
+app.delete("/api/lists", async (req, res) => {
+  try {
+    const { _id } = req.body;
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ message: "Missing _id in the request body" });
+    }
+
+    // Find the list by _id and delete it
+    const deletedList = await ShoppingList.findByIdAndDelete(_id);
+
+    // Check if the list was found and deleted
+    if (!deletedList) {
+      return res.status(404).json({ message: "List not found" });
+    }
+
+    return res.status(200).json({ message: "List deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting list:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+app.get("/api/lists/:email", async (req, res) => {
+  const userEmail = req.params.email;
+  try {
+    // Fetch all shopping lists that have the userEmail in their user_email field
+    const lists = await ShoppingList.find({ user_email: userEmail });
+
+    // Check if any lists were found
+    if (lists.length === 0) {
+      return res.status(404).json({ message: "No lists found for the user" });
+    }
+
+    return res.status(200).json(lists);
+  } catch (err) {
+    console.error("Error fetching lists:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.get("/api/lists", async (req, res) => {
   try {
     // Fetch all shopping lists from the database
