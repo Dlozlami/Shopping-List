@@ -28,6 +28,16 @@ export const getCredentials = async (requestedData) => {
   }
 };
 
+export const checkLoggedInStatus = async () => {
+  try {
+    const jwt = await SecureStore.getItemAsync("jwts");
+    console.log("Logged In...");
+  } catch (error) {
+    console.error("Error decoding JWT:", error);
+    return null;
+  }
+};
+
 export const logoutUser = createAsyncThunk(
   "login/logoutUser",
   async (_, thunkAPI) => {

@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("./models/user.model");
 const ShoppingList = require("./models/shoppingList.model");
-const ip = "192.168.0.232";
-const ipa = "10.255.66.152"; // change this to suit context
+const ipA = "192.168.0.232";
+const ip = "10.255.66.152"; // change this to suit context
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -32,7 +32,8 @@ app.post("/api/lists", async (req, res) => {
   try {
     const { list_name, user_email } = req.body;
     function toTitleCase(str) {
-      return str.replace(/\b\w/g, (match) => match.toUpperCase());
+      let lower = str.toLowerCase();
+      return lower.replace(/\b\w/g, (match) => match.toUpperCase());
     }
     // Create a new shopping list record with the provided name and email
     const newList = new ShoppingList({

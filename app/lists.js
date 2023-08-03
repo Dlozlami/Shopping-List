@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import MessageBox from "../component/messageBox";
 import formCSS from "../assets/css/formCSS";
-
+import jwt_decode from "jwt-decode";
 import { getCredentials } from "../features/loginSlice";
 import AddList from "../component/addList";
 import { createList } from "../features/listsSlice";
@@ -24,10 +24,13 @@ export default function Lists() {
   const [modalVisible, setModalVisible] = useState(false);
   const [newListName, setNewListName] = useState("");
   const dispatch = useDispatch();
+  const { isLoggedIn } = useSelector((store) => store.list);
 
-  const handleCreateList = () => {
+  const handleCreateList = async () => {
+    const jwt = await SecureStore.getItemAsync("jwt");
+    const decodedToken = jwt_decode(jwt);
     let list_name = newListName;
-    let user_email = dispatch(getCredentials("email")); // Assuming you have a getCredentials selector that returns the email
+    let user_email = decodedToken["email"];
     const newList = {
       list_name: list_name,
       user_email: user_email,

@@ -16,9 +16,16 @@ import { loginUser, logoutUser } from "../features/loginSlice";
 
 export default function Login() {
   const { isLoggedIn } = useSelector((store) => store.logIn);
-  isLoggedIn > 0 ? console.log("Renders") : null;
+  if (isLoggedIn > 0) {
+    async () => {
+      const jwt = await SecureStore.getItemAsync("jwt");
+      const decodedToken = jwt_decode(jwt);
+      setClientName(decodedToken["name"]);
+    };
+  }
   const navigation = useNavigation();
   const [enableBTN, setEnableBTN] = useState(false);
+  const [clientName, setClientName] = useState(null);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     email: "",
@@ -28,12 +35,19 @@ export default function Login() {
   const handleLogIn = () => {
     setEnableBTN(true);
     dispatch(loginUser(formData));
-    console.log("handleLogIn", isLoggedIn);
+    console.log("client", isLoggedIn);
     setFormData({
       email: "",
       password: "",
     });
     setEnableBTN(false);
+    if (isLoggedIn > 0) {
+      async () => {
+        const jwt = await SecureStore.getItemAsync("jwt");
+        const decodedToken = jwt_decode(jwt);
+        setClientName(decodedToken["name"]);
+      };
+    }
   };
 
   const handleLogOut = () => {
@@ -51,7 +65,7 @@ export default function Login() {
       {isLoggedIn === 200 ? (
         <View style={formCSS.container}>
           <View style={formCSS.panel}>
-            <Text style={formCSS.heading}>Hello, </Text>
+            <Text style={formCSS.heading}>Hello, {clientName}</Text>
 
             <TouchableOpacity onPress={() => navigation.navigate("lists")}>
               <Text style={formCSS.subheading}>
