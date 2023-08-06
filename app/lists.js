@@ -51,10 +51,10 @@ export default function Lists() {
       source={require("../assets/img/Shifty.jpg")}
       style={{ width: "100%", height: "100%" }}
     >
+      <View style={{ ...formCSS.panel, width: "90%" }}>
+        <Text style={formCSS.heading}>Shopping lists 🛍️</Text>
+      </View>
       <ScrollView contentContainerStyle={formCSS.container}>
-        <View style={{ ...formCSS.panel, width: "90%" }}>
-          <Text style={formCSS.heading}>Shopping lists 🛍️</Text>
-        </View>
         {user_lists.length === 0 ? (
           <View style={{ ...formCSS.panel, width: "90%" }}>
             <Text style={formCSS.subheading}>
@@ -93,14 +93,6 @@ export default function Lists() {
 }
 
 const styles = StyleSheet.create({
-  addList: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    zIndex: 9999,
-    padding: 10,
-    borderRadius: 10,
-  },
   modalBackground: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",

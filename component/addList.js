@@ -24,5 +24,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 7,
     margin: 10,
+
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    zIndex: 9999,
+    padding: 10,
+    borderRadius: 100,
   },
 });

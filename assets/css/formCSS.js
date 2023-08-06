@@ -10,16 +10,27 @@ export default styles = {
     borderRadius: 10,
     margin: 10,
   },
+  section: {
+    backgroundColor: "white",
+    padding: 20,
+    margin: 10,
+  },
   heading: {
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "bold",
     color: "#333",
     marginBottom: 10,
   },
   subheading: {
-    fontSize: 16,
+    fontSize: 24,
     color: "#333",
     marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 700,
+    margin: 0,
+    padding: 0,
   },
   input: {
     height: 40,
@@ -39,5 +50,15 @@ export default styles = {
     color: "white",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  labels: {
+    color: "gray",
+    fontSize: 10,
+    fontWeight: "bold",
+  },
+
+  para: {
+    marginBottom: 10,
+    marginTop: 10,
   },
 };

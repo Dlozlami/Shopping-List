@@ -69,7 +69,7 @@ export default function Login() {
             <Text style={formCSS.heading}>Hello, {clientName}</Text>
 
             <TouchableOpacity onPress={() => navigation.navigate("lists")}>
-              <Text style={formCSS.subheading}>
+              <Text style={formCSS.para}>
                 Proceed to your shopping lists 🛍️
               </Text>
             </TouchableOpacity>
@@ -87,7 +87,7 @@ export default function Login() {
         <View style={formCSS.container}>
           <View style={formCSS.panel}>
             <Text style={formCSS.heading}>Log in</Text>
-            <Text style={formCSS.subheading}>
+            <Text style={formCSS.para}>
               Please log in to access your shopping lists 🛍️
             </Text>
             <TextInput
@@ -113,7 +113,7 @@ export default function Login() {
               <Text style={formCSS.buttonText}>log in</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate("signup")}>
-              <Text style={formCSS.subheading}>
+              <Text style={formCSS.body}>
                 {"\n"}
                 Don't have an account? Sign up here!
               </Text>
