@@ -177,6 +177,117 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.patch("/api/lists", async (req, res) => {
+  try {
+    const id = req.body[0];
+    const newListItem = req.body[1];
+
+    // Find the shopping list by id
+    const shoppingList = await ShoppingList.findById(id);
+
+    // Check if the shopping list was found
+    if (!shoppingList) {
+      return res.status(404).json({ message: "Shopping list not found" });
+    }
+
+    // Add the newListItem to the items list in the shoppingList
+    shoppingList.items.push(newListItem);
+
+    // Calculate the total price by iterating through items
+    let totalPrice = 0;
+    for (const item of shoppingList.items) {
+      totalPrice += item.totalPrice;
+    }
+
+    // Update the shoppingList's total with the calculated totalPrice
+    shoppingList.total = totalPrice;
+
+    // Save the updated shopping list (including both the new item and total price) to the database
+    await shoppingList.save();
+
+    return res
+      .status(200)
+      .json({ message: "Item added to the shopping list successfully" });
+  } catch (err) {
+    console.error("Error adding item to shopping list:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// ... (previous code)
+
+// Delete a list by _id
+app.delete("/api/list", async (req, res) => {
+  try {
+    const { _id } = req.body;
+
+    // Check if _id is provided
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ message: "Missing _id in the request body" });
+    }
+
+    // Find the list by _id and delete it
+    const deletedList = await ShoppingList.findByIdAndDelete(_id);
+
+    // Check if the list was found and deleted
+    if (!deletedList) {
+      return res.status(404).json({ message: "List not found" });
+    }
+
+    return res.status(200).json({ message: "List deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting list:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+// Delete an item from a list by _id
+app.delete("/api/listItem", async (req, res) => {
+  try {
+    const { listId, itemId } = req.body;
+
+    // Check if listId and itemId are provided
+    if (!listId || !itemId) {
+      return res
+        .status(400)
+        .json({ message: "Missing listId or itemId in the request body" });
+    }
+
+    // Find the list by listId
+    const shoppingList = await ShoppingList.findById(listId);
+
+    // Check if the list was found
+    if (!shoppingList) {
+      return res.status(404).json({ message: "Shopping list not found" });
+    }
+
+    // Find the index of the item to be deleted in the shoppingList items array
+    const itemIndex = shoppingList.items.findIndex(
+      (item) => item._id == itemId
+    );
+
+    // Check if the item was found in the list
+    if (itemIndex === -1) {
+      return res.status(404).json({ message: "Item not found in the list" });
+    }
+
+    // Remove the item from the shoppingList items array
+    shoppingList.items.splice(itemIndex, 1);
+
+    // Save the updated shopping list to the database
+    await shoppingList.save();
+
+    return res
+      .status(200)
+      .json({ message: "Item deleted from the list successfully" });
+  } catch (err) {
+    console.error("Error deleting item from the list:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.listen(8080, ip, function () {
   console.log(
     `Server started...\nClick the url to gain access: http://${ip}:8080/`
