@@ -35,13 +35,14 @@ export default function Login() {
   const handleLogIn = () => {
     setEnableBTN(true);
     dispatch(loginUser(formData));
-    console.log("client", isLoggedIn);
+    //console.log("client", isLoggedIn);
     setFormData({
       email: "",
       password: "",
     });
     setEnableBTN(false);
     if (isLoggedIn > 0) {
+      console.log("isLoggedIn > 0");
       async () => {
         const jwt = await SecureStore.getItemAsync("jwt");
         const decodedToken = jwt_decode(jwt);

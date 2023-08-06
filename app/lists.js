@@ -20,6 +20,7 @@ import ListCard from "../component/listCard";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Lists() {
+  const [reloadScreen, setReloadScreen] = useState(false);
   const navigation = useNavigation();
   const [modalVisible, setModalVisible] = useState(false);
   const [newListName, setNewListName] = useState("");
@@ -37,12 +38,13 @@ export default function Lists() {
     };
     dispatch(createList(newList));
     setModalVisible(false);
+    setReloadScreen(!reloadScreen);
     setNewListName(""); // Clear the input field after creating the list
   };
 
   useEffect(() => {
     dispatch(fetchLists());
-  }, []);
+  }, [reloadScreen]);
 
   return (
     <ImageBackground

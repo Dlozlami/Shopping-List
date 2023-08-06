@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 export default function ListCard({ shoppingList }) {
   //console.log(shoppingList);
   const navigation = useNavigation();
+  const creationDate = new Date(shoppingList.t);
   return (
     <TouchableOpacity
       style={{ ...formCSS.panel, width: "90%" }}

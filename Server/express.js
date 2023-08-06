@@ -41,11 +41,13 @@ app.delete("/api/lists", async (req, res) => {
   }
 });
 
-app.get("/api/lists/:email", async (req, res) => {
-  const userEmail = req.params.email;
+app.post("/api/mylists/", async (req, res) => {
+  //const userEmail = req.params.email;
+  const { user_email } = req.body;
+  console.log("This is the email received: ", user_email);
   try {
     // Fetch all shopping lists that have the userEmail in their user_email field
-    const lists = await ShoppingList.find({ user_email: userEmail });
+    const lists = await ShoppingList.find({ user_email: user_email });
 
     // Check if any lists were found
     if (lists.length === 0) {
@@ -59,7 +61,7 @@ app.get("/api/lists/:email", async (req, res) => {
   }
 });
 
-app.get("/api/lists", async (req, res) => {
+app.get("/api/lists/", async (req, res) => {
   try {
     // Fetch all shopping lists from the database
     const lists = await ShoppingList.find();

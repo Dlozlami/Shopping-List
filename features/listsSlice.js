@@ -2,6 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { IP } from "@env";
+import jwt_decode from "jwt-decode";
 
 const initialState = {
   user_lists: [], // Updated key name to 'lists' to represent a list of lists.
@@ -10,9 +11,18 @@ const initialState = {
 // Thunk to get data from an endpoint
 export const fetchLists = createAsyncThunk(
   "list/fetchLists",
-  async (email, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`http://${IP}:8080/api/lists`, email);
+      const jwt = await SecureStore.getItemAsync("jwt");
+
+      const decodedToken = jwt_decode(jwt);
+
+      let user_email = decodedToken["email"];
+
+      const response = await axios.post(`http://${IP}:8080/api/mylists`, {
+        user_email: user_email,
+      });
+      //console.log("jwt: ", response);
       return response.data;
     } catch (error) {
       console.error("Error fetching lists:", error);

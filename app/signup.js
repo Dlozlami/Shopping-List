@@ -35,8 +35,8 @@ export default function Signup() {
       password: "",
       phone: "",
     });
-    setModalVisible(true);
     setEnableBTN(false);
+    setModalVisible(true);
   };
 
   return (
