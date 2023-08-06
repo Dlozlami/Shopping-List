@@ -9,7 +9,7 @@ export default function ListCard({ shoppingList }) {
   const creationDate = new Date(shoppingList.t);
   return (
     <TouchableOpacity
-      style={{ ...formCSS.panel, width: "90%" }}
+      style={formCSS.panel}
       onPress={() => navigation.navigate("viewList", { _id: shoppingList._id })}
     >
       <Text>{shoppingList.list_name}</Text>

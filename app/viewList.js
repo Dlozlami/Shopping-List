@@ -11,11 +11,14 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import formCSS from "../assets/css/formCSS";
-import Seperator from "../component/seperator";
 import AddList from "../component/addList";
+import { addToList, fetchLists } from "../features/listsSlice";
+import { FlatList } from "react-native-gesture-handler";
+import ItemsListCard from "../component/itemsListCard";
 
 export default function ViewList({ route }) {
   const [modalVisible, setModalVisible] = useState(false);
+  const [optionsModal, setOptionsModal] = useState(false);
   const [name, setName] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [price, setPrice] = useState(null);
@@ -24,21 +27,24 @@ export default function ViewList({ route }) {
   const { user_lists } = useSelector((store) => store.list);
   const itemIndex = findIndexById(user_lists, _id);
   let creationDate = new Date(user_lists[itemIndex].timestamp);
+  const dispatch = useDispatch();
 
   const handleAddToList = async () => {
-    const jwt = await SecureStore.getItemAsync("jwt");
-    const decodedToken = jwt_decode(jwt);
-    let list_name = newListName;
-    let user_email = decodedToken["email"];
-    const newItem = {
-      name: name,
-      quantity: quantity,
-      price: price,
-      totalPrice: quantity * price,
-    };
-    dispatch(addToList(newList));
+    const newItem = [
+      _id,
+      {
+        name: name,
+        quantity: quantity,
+        price: price,
+        totalPrice: quantity * price,
+      },
+    ];
+    dispatch(addToList(newItem));
+    dispatch(fetchLists());
     setModalVisible(false);
-    setNewListName(""); // Clear the input field after creating the list
+    setName(null); // Clear the input field after creating the list
+    setQuantity(null); // Clear the input field after creating the list
+    setPrice(null); // Clear the input field after creating the list
   };
 
   return (
@@ -82,7 +88,55 @@ export default function ViewList({ route }) {
           </View>
         </View>
       </ImageBackground>
-      <View style={formCSS.section}></View>
+      <View style={formCSS.section}>
+        <View style={{ flexDirection: "row", marginBottom: 10 }}>
+          <View
+            style={{
+              width: "30%",
+              borderBottomWidth: 1,
+              borderBottomColor: "black",
+            }}
+          >
+            <Text style={{ fontWeight: 700, color: "gray" }}>Name</Text>
+          </View>
+          <View
+            style={{
+              width: "15%",
+              borderBottomWidth: 1,
+              borderBottomColor: "black",
+            }}
+          >
+            <Text style={{ fontWeight: 700, color: "gray" }}>Qty</Text>
+          </View>
+          <View
+            style={{
+              width: "25%",
+              borderBottomWidth: 1,
+              borderBottomColor: "black",
+            }}
+          >
+            <Text style={{ fontWeight: 700, color: "gray" }}>Price</Text>
+          </View>
+          <View
+            style={{
+              width: "20%",
+              borderBottomWidth: 1,
+              borderBottomColor: "black",
+            }}
+          >
+            <Text style={{ fontWeight: 700, color: "gray" }}>Amount</Text>
+          </View>
+        </View>
+        {user_lists[itemIndex].items.length === 0 ? (
+          <Text>You have no items.</Text>
+        ) : (
+          <FlatList
+            data={user_lists[itemIndex].items}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => <ItemsListCard item={item} />}
+          />
+        )}
+      </View>
       <View style={formCSS.section}>
         <View
           style={{
@@ -108,7 +162,7 @@ export default function ViewList({ route }) {
             />
             <TextInput
               style={formCSS.input}
-              placeholder="Enter item quantity"
+              placeholder={"How many " + name}
               value={quantity}
               onChangeText={(text) => setQuantity(text)}
             />
@@ -118,7 +172,10 @@ export default function ViewList({ route }) {
               value={price}
               onChangeText={(text) => setPrice(text)}
             />
-            <TouchableOpacity style={formCSS.button} onPress={handleAddToList}>
+            <TouchableOpacity
+              style={formCSS.button}
+              onPress={name && quantity && price ? handleAddToList : null}
+            >
               <Text style={formCSS.buttonText}>Add item</Text>
             </TouchableOpacity>
           </View>
@@ -139,10 +196,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
-    alignItems: "center",
   },
   input: {
-    width: "100%",
     padding: 10,
     marginBottom: 20,
     borderWidth: 1,

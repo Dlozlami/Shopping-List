@@ -53,7 +53,7 @@ export const addToList = createAsyncThunk(
   async (listData, thunkAPI) => {
     console.log("ListData", listData);
     try {
-      const response = await axios.post(
+      const response = await axios.patch(
         `http://${IP}:8080/api/lists`,
         listData
       );

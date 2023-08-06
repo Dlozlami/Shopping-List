@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const listItemSchema = new Schema({
+  _id: { type: mongoose.Types.ObjectId, auto: true },
   quantity: { type: Number },
   name: { type: String },
   price: { type: Number },

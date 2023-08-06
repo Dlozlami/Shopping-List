@@ -34,6 +34,7 @@ export default styles = {
   },
   input: {
     height: 40,
+
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 5,
