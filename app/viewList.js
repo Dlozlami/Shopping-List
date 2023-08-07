@@ -12,7 +12,12 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import formCSS from "../assets/css/formCSS";
 import AddList from "../component/addList";
-import { addToList, fetchLists } from "../features/listsSlice";
+import {
+  addToList,
+  fetchLists,
+  deleteList,
+  updateListName,
+} from "../features/listsSlice";
 import { FlatList } from "react-native-gesture-handler";
 import ItemsListCard from "../component/itemsListCard";
 import { Ionicons } from "@expo/vector-icons";
@@ -29,7 +34,7 @@ export default function ViewList({ route }) {
   const { _id } = route.params;
   const { user_lists } = useSelector((store) => store.list);
   const itemIndex = findIndexById(user_lists, _id);
-  let creationDate = new Date(user_lists[itemIndex].timestamp);
+  let creationDate = new Date(user_lists && user_lists[itemIndex].timestamp);
   const dispatch = useDispatch();
 
   const handleAddToList = async () => {
@@ -48,6 +53,24 @@ export default function ViewList({ route }) {
     setName(null); // Clear the input field after creating the list
     setQuantity(null); // Clear the input field after creating the list
     setPrice(null); // Clear the input field after creating the list
+  };
+  const handleDeleteList = async () => {
+    dispatch(deleteList(_id));
+    dispatch(fetchLists());
+    setListOptionsModal(false);
+    navigation.navigate("lists");
+  };
+
+  const handleUpdateName = async () => {
+    dispatch(
+      updateListName({
+        listId: _id,
+        list_name: user_lists[itemIndex].list_name,
+      })
+    );
+    dispatch(fetchLists());
+    setListOptionsModal(false);
+    setListName(null);
   };
 
   return (
@@ -213,7 +236,7 @@ export default function ViewList({ route }) {
             >
               <TouchableOpacity
                 style={{ ...formCSS.button, backgroundColor: "#AF1B3F" }}
-                onPress={null}
+                onPress={handleDeleteList}
               >
                 <Text style={{ ...formCSS.buttonText, color: "white" }}>
                   <Ionicons name="trash-outline" size={24} color="white" />
@@ -221,21 +244,19 @@ export default function ViewList({ route }) {
                 </Text>
               </TouchableOpacity>
             </View>
-            <View>
+            <View style={{ marginBottom: 20 }}>
               <Text style={formCSS.inverseButtonText}>Edit list name</Text>
               <TextInput
                 style={formCSS.input}
                 placeholder={user_lists[itemIndex].list_name}
-                value={price}
-                onChangeText={(text) => setPrice(text)}
+                value={listName}
+                onChangeText={(text) => setListName(text)}
               />
-            </View>
-            <View>
               <TouchableOpacity
                 style={formCSS.button}
-                onPress={listName ? handleAddToList : null}
+                onPress={handleUpdateName}
               >
-                <Text style={formCSS.buttonText}>Add item</Text>
+                <Text style={formCSS.buttonText}>Change name</Text>
               </TouchableOpacity>
             </View>
             <View>

@@ -177,6 +177,42 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.patch("/api/list/names", async (req, res) => {
+  try {
+    const { _id, list_name } = req.body;
+
+    // Validate that both _id and list_name are provided
+    if (!_id || !list_name) {
+      return res
+        .status(400)
+        .json({ message: "Missing _id or list_name in the request body" });
+    }
+
+    // Convert list_name to title case (e.g., capitalize first letter of each word)
+    let newName = list_name.toLowerCase();
+    newName = newName.replace(/\b\w/g, (match) => match.toUpperCase());
+
+    // Find the shopping list by _id
+    const shoppingList = await ShoppingList.findById(_id);
+
+    // Check if the shopping list was found
+    if (!shoppingList) {
+      return res.status(404).json({ message: "Shopping list not found" });
+    }
+
+    // Update the shoppingList's list_name with the new name
+    shoppingList.list_name = newName;
+
+    // Save the updated shopping list to the database
+    await shoppingList.save();
+
+    return res.status(200).json({ message: "List name updated successfully" });
+  } catch (err) {
+    console.error("Error updating list name:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.patch("/api/lists", async (req, res) => {
   try {
     const id = req.body[0];

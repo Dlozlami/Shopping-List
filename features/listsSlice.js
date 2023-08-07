@@ -14,11 +14,8 @@ export const fetchLists = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const jwt = await SecureStore.getItemAsync("jwt");
-
       const decodedToken = jwt_decode(jwt);
-
       let user_email = decodedToken["email"];
-
       const response = await axios.post(`http://${IP}:8080/api/mylists`, {
         user_email: user_email,
       });
@@ -60,6 +57,39 @@ export const addToList = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.error("Error creating list:", error);
+      throw error;
+    }
+  }
+);
+
+export const deleteList = createAsyncThunk(
+  "list/deleteList",
+  async (listId, thunkAPI) => {
+    try {
+      // Send the _id of the list to be deleted
+      const response = await axios.delete(`http://${IP}:8080/api/lists`, {
+        data: { _id: listId },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting list:", error);
+      throw error;
+    }
+  }
+);
+
+export const updateListName = createAsyncThunk(
+  "list/updateListName",
+  async ({ listId, list_name }, thunkAPI) => {
+    console.log("The id: ", listId);
+    try {
+      const response = await axios.patch(`http://${IP}:8080/api/list/names`, {
+        _id: listId,
+        list_name: list_name,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating list name:", error);
       throw error;
     }
   }
