@@ -15,10 +15,13 @@ import AddList from "../component/addList";
 import { addToList, fetchLists } from "../features/listsSlice";
 import { FlatList } from "react-native-gesture-handler";
 import ItemsListCard from "../component/itemsListCard";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function ViewList({ route }) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [optionsModal, setOptionsModal] = useState(false);
+  const [listOptionsModal, setListOptionsModal] = useState(false);
+  const [itemOptionsModal, setItemOptionsModal] = useState(false);
+  const [listName, setListName] = useState(null);
   const [name, setName] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [price, setPrice] = useState(null);
@@ -59,32 +62,34 @@ export default function ViewList({ route }) {
         }}
       >
         <View>
-          <Text style={{ ...formCSS.heading, color: "white" }}>
+          <Text style={{ ...formCSS.title, color: "white" }}>
             {user_lists[itemIndex].list_name}
           </Text>
-          <Text style={{ ...formCSS.subheading, color: "white" }}>
-            {user_lists[itemIndex].items.length} items
+          <Text style={{ color: "white" }}>
+            {user_lists[itemIndex].items.length}{" "}
+            {user_lists[itemIndex].items.length === 1 ? "item" : "items"}
           </Text>
         </View>
         <View>
           <View style={{ marginBottom: 15 }}>
             <Text style={formCSS.labels}>DATE CREATED</Text>
             {creationDate.getDate() < 9 ? (
-              <Text>
+              <Text style={{ color: "white" }}>
                 0{creationDate.getDate()}{" "}
                 {creationDate.toDateString().split(" ")[1]}
               </Text>
             ) : (
-              <Text>
+              <Text style={{ color: "white" }}>
                 {creationDate.getDate()}{" "}
                 {creationDate.toDateString().split(" ")[1]}
               </Text>
             )}
-            <Text>{creationDate.getFullYear()}</Text>
+            <Text style={{ color: "white" }}>{creationDate.getFullYear()}</Text>
           </View>
           <View>
-            <Text style={formCSS.labels}>TOTAL</Text>
-            <Text>R {user_lists[itemIndex].total}</Text>
+            <TouchableOpacity onPress={() => setListOptionsModal(true)}>
+              <Ionicons name="options" size={24} color="white" />
+            </TouchableOpacity>
           </View>
         </View>
       </ImageBackground>
@@ -145,11 +150,15 @@ export default function ViewList({ route }) {
             justifyContent: "space-between",
           }}
         >
-          <Text style={formCSS.title}>TOTAL</Text>
-          <Text style={formCSS.title}>{user_lists[itemIndex].total}</Text>
+          <Text style={{ ...formCSS.title, color: "#6c6d61" }}>TOTAL</Text>
+          <Text style={{ ...formCSS.title, color: "#6c6d61" }}>
+            R {user_lists[itemIndex].total}
+          </Text>
         </View>
       </View>
       <AddList bgColor="#7D805E" setModalVisible={setModalVisible} />
+
+      {/* MODAL ============================== Add to a list */}
       <Modal visible={modalVisible} transparent={true}>
         <View style={styles.modalBackground}>
           <View style={styles.modalContent}>
@@ -178,6 +187,65 @@ export default function ViewList({ route }) {
             >
               <Text style={formCSS.buttonText}>Add item</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+              style={formCSS.inverseButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={formCSS.inverseButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* MODAL ============================== List options */}
+      <Modal visible={listOptionsModal} transparent={true}>
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContent}>
+            <Text style={{ ...formCSS.heading, marginBottom: 30 }}>
+              List Options
+            </Text>
+            <View
+              style={{
+                borderBottomWidth: 1,
+                borderBottomColor: "#6c6d61",
+                marginBottom: 20,
+              }}
+            >
+              <TouchableOpacity
+                style={{ ...formCSS.button, backgroundColor: "#AF1B3F" }}
+                onPress={null}
+              >
+                <Text style={{ ...formCSS.buttonText, color: "white" }}>
+                  <Ionicons name="trash-outline" size={24} color="white" />
+                  Delete List
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <Text style={formCSS.inverseButtonText}>Edit list name</Text>
+              <TextInput
+                style={formCSS.input}
+                placeholder={user_lists[itemIndex].list_name}
+                value={price}
+                onChangeText={(text) => setPrice(text)}
+              />
+            </View>
+            <View>
+              <TouchableOpacity
+                style={formCSS.button}
+                onPress={listName ? handleAddToList : null}
+              >
+                <Text style={formCSS.buttonText}>Add item</Text>
+              </TouchableOpacity>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={formCSS.inverseButton}
+                onPress={() => setListOptionsModal(false)}
+              >
+                <Text style={formCSS.inverseButtonText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>

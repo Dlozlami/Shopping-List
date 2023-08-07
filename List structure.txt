@@ -11,4 +11,7 @@ total
 ]
 
 
-Tables 
+heading = Log in
+subheading =Please log in to access your shopping lists 🛍️
+
+danger color = AF1B3F

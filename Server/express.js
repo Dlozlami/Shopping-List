@@ -8,8 +8,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("./models/user.model");
 const ShoppingList = require("./models/shoppingList.model");
-const ip = "192.168.99.94";
-const ipA = "10.255.66.152"; // change this to suit context
+const ipa = "192.168.99.94";
+const ip = "10.255.66.152"; // change this to suit context
 const app = express();
 app.use(cors());
 app.use(express.json());

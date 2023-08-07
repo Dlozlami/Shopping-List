@@ -24,7 +24,7 @@ export default function ItemsListCard({ item }) {
         <Text>{parseFloat(item.totalPrice).toFixed(2)}</Text>
       </View>
       <TouchableOpacity style={{ alignItems: "center" }}>
-        <Ionicons name="options" size={24} color="black" />
+        <Ionicons name="options" size={24} color="#7D805E" />
       </TouchableOpacity>
     </View>
   );
