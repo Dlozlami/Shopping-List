@@ -5,24 +5,17 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as SecureStore from "expo-secure-store";
 import MessageBox from "../component/messageBox";
 import formCSS from "../assets/css/formCSS";
 import jwt_decode from "jwt-decode";
 import { useNavigation } from "@react-navigation/native";
-import { loginUser, logoutUser } from "../features/loginSlice";
+import { loginUser, logoutUser, refreshLogin } from "../features/loginSlice";
 
 export default function Login() {
   const { isLoggedIn } = useSelector((store) => store.logIn);
-  if (isLoggedIn > 0) {
-    async () => {
-      const jwt = await SecureStore.getItemAsync("jwt");
-      const decodedToken = jwt_decode(jwt);
-      setClientName(decodedToken["name"]);
-    };
-  }
   const navigation = useNavigation();
   const [enableBTN, setEnableBTN] = useState(false);
   const [clientName, setClientName] = useState(null);
@@ -32,30 +25,34 @@ export default function Login() {
     password: "",
   });
 
+  useEffect(() => {
+    dispatch(refreshLogin());
+    getClientName();
+  }, [isLoggedIn]);
+
   const handleLogIn = () => {
     setEnableBTN(true);
     dispatch(loginUser(formData));
-    //console.log("client", isLoggedIn);
+    console.log("client", isLoggedIn);
     setFormData({
       email: "",
       password: "",
     });
     setEnableBTN(false);
-    if (isLoggedIn > 0) {
-      console.log("isLoggedIn > 0");
-      async () => {
-        const jwt = await SecureStore.getItemAsync("jwt");
-        const decodedToken = jwt_decode(jwt);
-        setClientName(decodedToken["name"]);
-      };
-    }
   };
 
   const handleLogOut = () => {
     setEnableBTN(true);
     dispatch(logoutUser());
-    //console.log("handleLogOut", isLoggedIn);
     setEnableBTN(false);
+  };
+
+  const getClientName = async () => {
+    if (isLoggedIn > 0) {
+      const jwt = await SecureStore.getItemAsync("jwt");
+      const decodedToken = jwt_decode(jwt);
+      setClientName(decodedToken["name"]);
+    }
   };
 
   return (
@@ -68,10 +65,11 @@ export default function Login() {
           <View style={formCSS.panel}>
             <Text style={formCSS.heading}>Hello, {clientName}</Text>
 
-            <TouchableOpacity onPress={() => navigation.navigate("lists")}>
-              <Text style={formCSS.para}>
-                Proceed to your shopping lists 🛍️
-              </Text>
+            <TouchableOpacity
+              style={formCSS.inverseButton}
+              onPress={() => navigation.navigate("lists")}
+            >
+              <Text style={formCSS.inverseButtonText}>Shopping lists 🛍️</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -107,7 +105,7 @@ export default function Login() {
             />
             <TouchableOpacity
               style={formCSS.button}
-              onPress={() => handleLogIn()}
+              onPress={handleLogIn}
               disabled={enableBTN}
             >
               <Text style={formCSS.buttonText}>log in</Text>

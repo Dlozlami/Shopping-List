@@ -14,8 +14,10 @@ export const fetchLists = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const jwt = await SecureStore.getItemAsync("jwt");
+      //console.log("running list/fetchLists: ", jwt);
       const decodedToken = jwt_decode(jwt);
       let user_email = decodedToken["email"];
+
       const response = await axios.post(`http://${IP}:8080/api/mylists`, {
         user_email: user_email,
       });
@@ -78,14 +80,52 @@ export const deleteList = createAsyncThunk(
   }
 );
 
+export const deleteAnItem = createAsyncThunk(
+  "list/deleteAnItem",
+  async ({ listId, itemId }, thunkAPI) => {
+    //console.log("list/deleteAnItem listid", listId);
+    try {
+      // Send the _id of the list to be deleted
+      const response = await axios.delete(`http://${IP}:8080/api/listItem`, {
+        data: { listId: listId, itemId: itemId },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting list item:", error);
+      throw error;
+    }
+  }
+);
+
 export const updateListName = createAsyncThunk(
   "list/updateListName",
   async ({ listId, list_name }, thunkAPI) => {
-    console.log("The id: ", listId);
+    //console.log("The id: ", listId);
     try {
       const response = await axios.patch(`http://${IP}:8080/api/list/names`, {
         _id: listId,
         list_name: list_name,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Error updating list name:", error);
+      throw error;
+    }
+  }
+);
+
+export const updateListItem = createAsyncThunk(
+  "list/updateListName",
+  async ({ listId, itemId, name, quantity, price, totalPrice }, thunkAPI) => {
+    //console.log("The id: ", listId);
+    try {
+      const response = await axios.patch(`http://${IP}:8080/api/listitem`, {
+        listId: listId,
+        itemId: itemId,
+        name: name,
+        quantity: quantity,
+        price: price,
+        totalPrice: totalPrice,
       });
       return response.data;
     } catch (error) {

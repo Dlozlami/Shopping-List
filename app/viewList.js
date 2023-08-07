@@ -25,7 +25,6 @@ import { Ionicons } from "@expo/vector-icons";
 export default function ViewList({ route }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [listOptionsModal, setListOptionsModal] = useState(false);
-  const [itemOptionsModal, setItemOptionsModal] = useState(false);
   const [listName, setListName] = useState(null);
   const [name, setName] = useState(null);
   const [quantity, setQuantity] = useState(null);
@@ -54,6 +53,7 @@ export default function ViewList({ route }) {
     setQuantity(null); // Clear the input field after creating the list
     setPrice(null); // Clear the input field after creating the list
   };
+
   const handleDeleteList = async () => {
     dispatch(deleteList(_id));
     dispatch(fetchLists());
@@ -65,7 +65,7 @@ export default function ViewList({ route }) {
     dispatch(
       updateListName({
         listId: _id,
-        list_name: user_lists[itemIndex].list_name,
+        list_name: listName,
       })
     );
     dispatch(fetchLists());
@@ -79,6 +79,7 @@ export default function ViewList({ route }) {
         source={require("../assets/img/Shifty.jpg")}
         style={{
           ...formCSS.panel,
+          ...formCSS.shadow,
           flexDirection: "row",
           justifyContent: "space-between",
           color: "white",
@@ -116,7 +117,7 @@ export default function ViewList({ route }) {
           </View>
         </View>
       </ImageBackground>
-      <View style={formCSS.section}>
+      <View style={{ ...formCSS.section, ...formCSS.shadow }}>
         <View style={{ flexDirection: "row", marginBottom: 10 }}>
           <View
             style={{
@@ -161,11 +162,13 @@ export default function ViewList({ route }) {
           <FlatList
             data={user_lists[itemIndex].items}
             keyExtractor={(item) => item._id}
-            renderItem={({ item }) => <ItemsListCard item={item} />}
+            renderItem={({ item }) => (
+              <ItemsListCard item={item} listId={_id} />
+            )}
           />
         )}
       </View>
-      <View style={formCSS.section}>
+      <View style={{ ...formCSS.section, ...formCSS.shadow }}>
         <View
           style={{
             borderTop: "1px black solid",

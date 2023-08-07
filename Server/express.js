@@ -177,6 +177,51 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
+app.patch("/api/listItem", async (req, res) => {
+  try {
+    const { listId, itemId, name, quantity, price, totalPrice } = req.body;
+
+    // Check if listId, itemId, name, quantity, price, and totalPrice are provided
+    if (!listId || !itemId || !name || !quantity || !price || !totalPrice) {
+      return res
+        .status(400)
+        .json({ message: "Missing required fields in the request body" });
+    }
+
+    // Find the list by listId
+    const shoppingList = await ShoppingList.findById(listId);
+
+    // Check if the list was found
+    if (!shoppingList) {
+      return res.status(404).json({ message: "Shopping list not found" });
+    }
+
+    // Find the item to be updated in the shoppingList items array
+    const itemToUpdate = shoppingList.items.find((item) => item._id == itemId);
+
+    // Check if the item was found in the list
+    if (!itemToUpdate) {
+      return res.status(404).json({ message: "Item not found in the list" });
+    }
+
+    // Update the item properties with the provided data
+    itemToUpdate.name = name;
+    itemToUpdate.quantity = quantity;
+    itemToUpdate.price = price;
+    itemToUpdate.totalPrice = totalPrice;
+
+    // Save the updated shopping list to the database
+    await shoppingList.save();
+
+    return res
+      .status(200)
+      .json({ message: "Item updated in the list successfully" });
+  } catch (err) {
+    console.error("Error updating item in the list:", err);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 app.patch("/api/list/names", async (req, res) => {
   try {
     const { _id, list_name } = req.body;
@@ -249,8 +294,6 @@ app.patch("/api/lists", async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 });
-
-// ... (previous code)
 
 // Delete a list by _id
 app.delete("/api/list", async (req, res) => {

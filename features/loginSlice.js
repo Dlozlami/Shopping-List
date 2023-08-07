@@ -17,26 +17,20 @@ const storeJWTInSecureStore = async (jwt) => {
   }
 };
 
-export const getCredentials = async (requestedData) => {
-  try {
-    const jwt = await SecureStore.getItemAsync("jwt");
-    const decodedToken = jwt_decode(jwt);
-    return decodedToken[requestedData];
-  } catch (error) {
-    console.error("Error decoding JWT:", error);
-    return null;
+export const refreshLogin = createAsyncThunk(
+  "login/refreshLogin",
+  async (_, thunkAPI) => {
+    try {
+      const jwt = await SecureStore.getItemAsync("jwt");
+      if (jwt) {
+        thunkAPI.dispatch(setIsLoggedIn(200));
+      }
+    } catch (error) {
+      console.error("refreshLogin: Error decoding JWT:", error);
+      return null;
+    }
   }
-};
-
-export const checkLoggedInStatus = async () => {
-  try {
-    const jwt = await SecureStore.getItemAsync("jwts");
-    console.log("Logged In...");
-  } catch (error) {
-    console.error("Error decoding JWT:", error);
-    return null;
-  }
-};
+);
 
 export const logoutUser = createAsyncThunk(
   "login/logoutUser",

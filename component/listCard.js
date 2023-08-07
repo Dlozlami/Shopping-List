@@ -6,14 +6,19 @@ import { useNavigation } from "@react-navigation/native";
 export default function ListCard({ shoppingList }) {
   //console.log(shoppingList);
   const navigation = useNavigation();
-  const creationDate = new Date(shoppingList.t);
+  const creationDate = new Date(shoppingList.timestamp);
   return (
-    <TouchableOpacity
-      style={formCSS.panel}
-      onPress={() => navigation.navigate("viewList", { _id: shoppingList._id })}
-    >
-      <Text>{shoppingList.list_name}</Text>
-      <Text>{shoppingList.items.length} items</Text>
-    </TouchableOpacity>
+    <View>
+      <View></View>
+      <TouchableOpacity
+        style={formCSS.panel}
+        onPress={() =>
+          navigation.navigate("viewList", { _id: shoppingList._id })
+        }
+      >
+        <Text>{shoppingList.list_name}</Text>
+        <Text>{shoppingList.items.length} items</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
