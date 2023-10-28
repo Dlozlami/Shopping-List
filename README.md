@@ -50,3 +50,9 @@ Start JSON Server
 ```bash
   npx nodemon .\express.js 
 ```
+
+## Tech Stack
+
+**Client:** React Native, Expo, Redux/Toolkit, CSS3
+
+**Server:** Node, Express
