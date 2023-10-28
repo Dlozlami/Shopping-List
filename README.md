@@ -18,7 +18,7 @@ npx create-expo-app -e with-router
 Clone the project
 
 ```bash
-  git clone [https://github.com/Dlozlami/Shopping-List.git](https://github.com/Dlozlami/Shopping-List.git)
+  git clone https://github.com/Dlozlami/Shopping-List.git
 ```
 
 Go to the project directory
