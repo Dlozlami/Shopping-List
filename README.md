@@ -48,5 +48,5 @@ Go to the Server directory
 ```
 Start JSON Server
 ```bash
-  npx json-server --watch tododb.json --port 4000  
+  npx nodemon .\express.js 
 ```
