@@ -44,7 +44,7 @@ Start Express Server
 
 **Client:** React Native, Expo, Redux/Toolkit, CSS3
 
-**Server:** Node, Express
+**Server:** Node, Express, MongoDB
 
 ## 🚀 How to make
 
