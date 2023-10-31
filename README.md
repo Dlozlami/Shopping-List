@@ -1,17 +1,6 @@
 <img src="https://socialify.git.ci/Dlozlami/Shopping-List/image?language=1&owner=1&name=1&stargazers=1&theme=Light" alt="Shopping-List" width="640" height="320" />
 
-Shopping list app for users to create, update and delete shopping lists. Using [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory and Redux\Toolkit.
-
-## 🚀 How to make
-
-```sh
-npx create-expo-app -e with-router
-```
-
-## 📝 Notes
-
-- [Expo Router: Docs](https://expo.github.io/router)
-- [Expo Router: Repo](https://github.com/expo/router)
+Shopping list app for users to create, update and delete shopping lists. 
 
 ## Run Locally
 
@@ -39,14 +28,14 @@ Start the react server
   npm run start
 ```
 
-## Start the JSON server
+## Start the server
 
 Go to the Server directory
 
 ```bash
   cd Server
 ```
-Start JSON Server
+Start Express Server
 ```bash
   npx nodemon .\express.js 
 ```
@@ -55,4 +44,16 @@ Start JSON Server
 
 **Client:** React Native, Expo, Redux/Toolkit, CSS3
 
-**Server:** Node, Express
+**Server:** Node, Express, MongoDB
+
+Using [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory and Redux\Toolkit.
+## 🚀 How to make
+
+```sh
+npx create-expo-app -e with-router
+```
+
+## 📝 Notes
+
+- [Expo Router: Docs](https://expo.github.io/router)
+- [Expo Router: Repo](https://github.com/expo/router)
