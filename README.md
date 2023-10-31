@@ -1,6 +1,6 @@
 <img src="https://socialify.git.ci/Dlozlami/Shopping-List/image?language=1&owner=1&name=1&stargazers=1&theme=Light" alt="Shopping-List" width="640" height="320" />
 
-Shopping list app for users to create, update and delete shopping lists. Using [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory and Redux\Toolkit.
+Shopping list app for users to create, update and delete shopping lists. 
 
 ## Run Locally
 
@@ -46,6 +46,7 @@ Start Express Server
 
 **Server:** Node, Express, MongoDB
 
+Using [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory and Redux\Toolkit.
 ## 🚀 How to make
 
 ```sh
