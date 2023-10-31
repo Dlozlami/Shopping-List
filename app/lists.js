@@ -49,14 +49,12 @@ export default function Lists() {
 
   return (
     <>
-      <View style={formCSS.section}>
-        <Text style={formCSS.title}>Shopping lists 🛍️</Text>
-      </View>
-
       <ImageBackground
         source={require("../assets/img/Shifty.jpg")}
         style={{ width: "100%", height: "100%" }}
       >
+        <AddList setModalVisible={setModalVisible} />
+
         {user_lists.length === 0 ? (
           <View style={formCSS.container}>
             <View style={{ ...formCSS.panel, width: "90%" }}>
@@ -73,9 +71,6 @@ export default function Lists() {
           />
         )}
 
-        <View style={styles.addList}>
-          <AddList setModalVisible={setModalVisible} />
-        </View>
         <Modal visible={modalVisible} transparent={true}>
           <View style={styles.modalBackground}>
             <View style={styles.modalContent}>

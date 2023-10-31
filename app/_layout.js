@@ -26,7 +26,7 @@ export default function Layout() {
         <Stack.Screen
           name="lists"
           component={Lists}
-          options={{ headerShown: false }}
+          options={{ headerBackVisible:false,title:"Shopping lists 🛍️" }}
         />
         <Stack.Screen
           name="viewList"

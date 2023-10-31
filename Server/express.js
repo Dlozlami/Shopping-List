@@ -44,19 +44,20 @@ app.delete("/api/lists", async (req, res) => {
 app.post("/api/mylists/", async (req, res) => {
   //const userEmail = req.params.email;
   const { user_email } = req.body;
-  console.log("This is the email received: ", user_email);
+  console.log("Express.js line 47 user_email : ", user_email);
   try {
     // Fetch all shopping lists that have the userEmail in their user_email field
     const lists = await ShoppingList.find({ user_email: user_email });
 
     // Check if any lists were found
     if (lists.length === 0) {
-      return res.status(404).json({ message: "No lists found for the user" });
+      console.log("No lists for user email: ", user_email);
+      return;
     }
 
     return res.status(200).json(lists);
   } catch (err) {
-    console.error("Error fetching lists:", err);
+    console.error("Express.js line 59 Error fetching lists:", err);
     return res.status(500).json({ message: "Internal server error" });
   }
 });

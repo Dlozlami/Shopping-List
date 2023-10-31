@@ -24,7 +24,7 @@ export const fetchLists = createAsyncThunk(
       //console.log("jwt: ", response);
       return response.data;
     } catch (error) {
-      console.error("Error fetching lists:", error);
+      console.error("ListSlice.js Error fetching lists:", error);
       throw error;
     }
   }
