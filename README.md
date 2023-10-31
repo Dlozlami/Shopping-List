@@ -2,17 +2,6 @@
 
 Shopping list app for users to create, update and delete shopping lists. Using [`expo-router`](https://expo.github.io/router) to build native navigation using files in the `app/` directory and Redux\Toolkit.
 
-## 🚀 How to make
-
-```sh
-npx create-expo-app -e with-router
-```
-
-## 📝 Notes
-
-- [Expo Router: Docs](https://expo.github.io/router)
-- [Expo Router: Repo](https://github.com/expo/router)
-
 ## Run Locally
 
 Clone the project
@@ -39,7 +28,7 @@ Start the react server
   npm run start
 ```
 
-## Start the JSON server
+## Start the server
 
 Go to the Server directory
 
@@ -56,3 +45,14 @@ Start Express Server
 **Client:** React Native, Expo, Redux/Toolkit, CSS3
 
 **Server:** Node, Express
+
+## 🚀 How to make
+
+```sh
+npx create-expo-app -e with-router
+```
+
+## 📝 Notes
+
+- [Expo Router: Docs](https://expo.github.io/router)
+- [Expo Router: Repo](https://github.com/expo/router)
