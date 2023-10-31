@@ -46,7 +46,7 @@ Go to the Server directory
 ```bash
   cd Server
 ```
-Start JSON Server
+Start Express Server
 ```bash
   npx nodemon .\express.js 
 ```
